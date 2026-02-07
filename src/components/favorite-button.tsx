@@ -8,29 +8,29 @@ import { cn } from '@/lib/utils'
 interface FavoriteButtonProps {
     hymnId: string
     initialFavorited?: boolean
+    userId: string
 }
 
-export function FavoriteButton({ hymnId, initialFavorited = false }: FavoriteButtonProps) {
+export function FavoriteButton({ hymnId, initialFavorited = false, userId }: FavoriteButtonProps) {
     const [isFavorited, setIsFavorited] = useState(initialFavorited)
     const [loading, setLoading] = useState(false)
     const supabase = createClient()
 
     useEffect(() => {
         const checkFavorite = async () => {
-            const { data: { user } } = await supabase.auth.getUser()
-            if (!user) return
+            if (!userId) return
 
             const { data } = await supabase
                 .from('favorites')
                 .select('*')
-                .eq('user_id', user.id)
+                .eq('user_id', userId)
                 .eq('hymn_id', hymnId)
                 .single()
 
             if (data) setIsFavorited(true)
         }
         checkFavorite()
-    }, [hymnId, supabase])
+    }, [hymnId, supabase, userId])
 
     const toggleFavorite = async (e: React.MouseEvent) => {
         e.preventDefault()
@@ -38,8 +38,7 @@ export function FavoriteButton({ hymnId, initialFavorited = false }: FavoriteBut
         if (loading) return
         setLoading(true)
 
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
+        if (!userId) {
             alert('Please login to favorite hyms')
             setLoading(false)
             return
@@ -49,14 +48,14 @@ export function FavoriteButton({ hymnId, initialFavorited = false }: FavoriteBut
             const { error } = await supabase
                 .from('favorites')
                 .delete()
-                .eq('user_id', user.id)
+                .eq('user_id', userId)
                 .eq('hymn_id', hymnId)
 
             if (!error) setIsFavorited(false)
         } else {
             const { error } = await supabase
                 .from('favorites')
-                .insert({ user_id: user.id, hymn_id: hymnId })
+                .insert({ user_id: userId, hymn_id: hymnId })
 
             if (!error) setIsFavorited(true)
         }

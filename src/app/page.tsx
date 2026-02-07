@@ -45,7 +45,7 @@ export default async function Home({
         <SearchInput />
       </div>
 
-      <Feed query={query} />
+      <Feed query={query} userId={user.id} />
     </div>
   )
 }

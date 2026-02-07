@@ -6,7 +6,7 @@ import { Plus, Check, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { HymnList } from '@/lib/types'
 
-export function AddToListButton({ hymnId }: { hymnId: string }) {
+export function AddToListButton({ hymnId, userId }: { hymnId: string, userId: string }) {
     const [isOpen, setIsOpen] = useState(false)
     const [lists, setLists] = useState<HymnList[]>([])
     const [loading, setLoading] = useState(false)
@@ -15,13 +15,12 @@ export function AddToListButton({ hymnId }: { hymnId: string }) {
     useEffect(() => {
         if (isOpen) {
             const fetchLists = async () => {
-                const { data: { user } } = await supabase.auth.getUser()
-                if (!user) return
+                if (!userId) return
 
                 const { data } = await supabase
                     .from('hymn_lists')
                     .select('*')
-                    .eq('user_id', user.id)
+                    .eq('user_id', userId)
 
                 if (data) setLists(data)
             }

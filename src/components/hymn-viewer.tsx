@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ZoomIn, ZoomOut, RotateCcw } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { LoadingSpinner } from './loading-spinner'
 
 interface HymnViewerProps {
     imageUrl: string
@@ -13,6 +14,7 @@ interface HymnViewerProps {
 export function HymnViewer({ imageUrl, title }: HymnViewerProps) {
     const [scale, setScale] = useState(1)
     const [rotation, setRotation] = useState(0)
+    const [isLoading, setIsLoading] = useState(true)
 
     const handleZoomIn = () => {
         setScale(prev => Math.min(prev + 0.25, 3))
@@ -66,18 +68,25 @@ export function HymnViewer({ imageUrl, title }: HymnViewerProps) {
 
             {/* Image Container */}
             <div className="relative w-full overflow-auto bg-[#171717]/50 border border-white/5 rounded-xl shadow-2xl min-h-[50vh] flex items-center justify-center p-4">
+                {isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <LoadingSpinner size={48} />
+                    </div>
+                )}
                 <motion.div
                     animate={{ scale, rotate: rotation }}
                     transition={{ type: "spring", stiffness: 200, damping: 20 }}
                     className="origin-center"
-                    drag
+                    drag={scale > 1}
                     dragConstraints={{ left: -500, right: 500, top: -500, bottom: 500 }}
+                    style={{ display: isLoading ? 'none' : 'block' }}
                 >
                     <img
                         src={imageUrl}
                         alt={title}
                         className="max-w-full max-h-[75vh] w-auto h-auto object-contain shadow-lg"
                         draggable={false}
+                        onLoad={() => setIsLoading(false)}
                     />
                 </motion.div>
             </div>

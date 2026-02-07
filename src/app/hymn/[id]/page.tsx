@@ -48,8 +48,8 @@ export default async function HymnPage({
                 </Link>
 
                 <div className="flex items-center gap-2">
-                    <FavoriteButton hymnId={hymn.id} />
-                    <AddToListButton hymnId={hymn.id} />
+                    <FavoriteButton hymnId={hymn.id} userId={user.id} />
+                    <AddToListButton hymnId={hymn.id} userId={user.id} />
                 </div>
             </div>
 

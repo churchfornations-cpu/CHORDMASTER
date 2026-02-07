@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { FeedRenderer } from '@/components/feed-renderer'
+import { Hymn } from '@/lib/types'
 
 export default async function ListDetailsPage({
     params,
@@ -53,39 +55,17 @@ export default async function ListDetailsPage({
                 {/* Delete list button could go here */}
             </div>
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {items?.map((item: any) => (
-                    item.hymn && (
-                        <div key={item.id} className="group relative break-inside-avoid rounded-xl border border-white/10 bg-[#171717] overflow-hidden hover:border-[#FF5500] transition-all hover:shadow-[0_0_30px_rgba(255,85,0,0.15)]">
-                            <Link href={`/hymn/${item.hymn.id}`} className="block relative aspect-[3/4] w-full overflow-hidden">
-                                <img
-                                    src={item.hymn.image_url}
-                                    alt={item.hymn.title}
-                                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                    loading="lazy"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
-                                    <h3 className="text-lg font-bold text-white line-clamp-2">{item.hymn.title}</h3>
-                                    <p className="text-xs text-[#00FF00] font-medium mt-1">View Chord Sheet</p>
-                                </div>
-                            </Link>
-                            <div className="p-3 md:hidden">
-                                <h3 className="text-sm font-bold text-white truncate">{item.hymn.title}</h3>
-                            </div>
-                        </div>
-                    )
-                ))}
-
-                {(!items || items.length === 0) && (
-                    <div className="col-span-full py-20 text-center">
-                        <div className="inline-block p-4 rounded-full bg-white/5 mb-4">
-                            <Image src="/file.svg" width={40} height={40} alt="Empty" className="opacity-50" />
-                        </div>
-                        <p className="text-xl text-gray-400 font-medium">This list is empty.</p>
-                        <p className="text-sm text-gray-600 mt-2">Go to the Home Feed to add hymns.</p>
+            {items && items.length > 0 ? (
+                <FeedRenderer hymns={items.map((item: any) => item.hymn).filter(Boolean) as Hymn[]} userId={user.id} />
+            ) : (
+                <div className="py-20 text-center">
+                    <div className="inline-block p-4 rounded-full bg-white/5 mb-4">
+                        <Image src="/file.svg" width={40} height={40} alt="Empty" className="opacity-50" />
                     </div>
-                )}
-            </div>
+                    <p className="text-xl text-gray-400 font-medium">This list is empty.</p>
+                    <p className="text-sm text-gray-600 mt-2">Go to the Home Feed to add hymns.</p>
+                </div>
+            )}
         </div>
     )
 }

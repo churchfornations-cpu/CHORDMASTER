@@ -13,10 +13,11 @@ type ViewMode = 'small' | 'medium' | 'large' | 'list' | 'details'
 
 interface FeedRendererProps {
     hymns: Hymn[]
+    userId: string
 }
 
-export function FeedRenderer({ hymns }: FeedRendererProps) {
-    const [viewMode, setViewMode] = useState<ViewMode>('medium')
+export function FeedRenderer({ hymns, userId }: FeedRendererProps) {
+    const [viewMode, setViewMode] = useState<ViewMode>('list')
 
     return (
         <div className="space-y-6">
@@ -105,12 +106,12 @@ export function FeedRenderer({ hymns }: FeedRendererProps) {
                             </Link>
 
                             <div className="absolute bottom-3 right-3 z-10 md:hidden flex gap-2">
-                                <FavoriteButton hymnId={hymn.id} />
-                                <AddToListButton hymnId={hymn.id} />
+                                <FavoriteButton hymnId={hymn.id} userId={userId} />
+                                <AddToListButton hymnId={hymn.id} userId={userId} />
                             </div>
                             <div className="absolute bottom-4 right-4 z-10 hidden md:flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <FavoriteButton hymnId={hymn.id} />
-                                <AddToListButton hymnId={hymn.id} />
+                                <FavoriteButton hymnId={hymn.id} userId={userId} />
+                                <AddToListButton hymnId={hymn.id} userId={userId} />
                             </div>
 
                             <div className="p-3 md:hidden flex justify-between items-center bg-[#171717] relative z-0">
@@ -138,8 +139,8 @@ export function FeedRenderer({ hymns }: FeedRendererProps) {
                                 <Link href={`/hymn/${hymn.id}`} className="text-xs text-gray-500 hover:text-white hidden sm:block">
                                     View
                                 </Link>
-                                <FavoriteButton hymnId={hymn.id} />
-                                <AddToListButton hymnId={hymn.id} />
+                                <FavoriteButton hymnId={hymn.id} userId={userId} />
+                                <AddToListButton hymnId={hymn.id} userId={userId} />
                             </div>
                         </div>
                     ))}
@@ -170,8 +171,8 @@ export function FeedRenderer({ hymns }: FeedRendererProps) {
                                         <Link href={`/hymn/${hymn.id}`} className="text-sm font-medium text-[#00FF00] hover:underline">
                                             Open Sheet
                                         </Link>
-                                        <FavoriteButton hymnId={hymn.id} />
-                                        <AddToListButton hymnId={hymn.id} />
+                                        <FavoriteButton hymnId={hymn.id} userId={userId} />
+                                        <AddToListButton hymnId={hymn.id} userId={userId} />
                                     </div>
                                 </div>
                             </div>

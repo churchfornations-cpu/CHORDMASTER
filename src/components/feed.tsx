@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { FeedRenderer } from './feed-renderer'
 import { Hymn } from '@/lib/types'
 
-export default async function Feed({ query }: { query?: string }) {
+export default async function Feed({ query, userId }: { query?: string, userId: string }) {
     const supabase = await createClient()
 
     let dbQuery = supabase
@@ -29,5 +29,5 @@ export default async function Feed({ query }: { query?: string }) {
         )
     }
 
-    return <FeedRenderer hymns={hymns as Hymn[]} />
+    return <FeedRenderer hymns={hymns as Hymn[]} userId={userId} />
 }

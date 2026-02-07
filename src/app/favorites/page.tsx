@@ -41,7 +41,7 @@ export default async function FavoritesPage() {
                     <p className="text-sm text-gray-600 mt-2">Click the heart icon on any hymn to add it here.</p>
                 </div>
             ) : (
-                <FeedRenderer hymns={hymns as unknown as Hymn[]} />
+                <FeedRenderer hymns={hymns as unknown as Hymn[]} userId={user.id} />
             )}
         </div>
     )
